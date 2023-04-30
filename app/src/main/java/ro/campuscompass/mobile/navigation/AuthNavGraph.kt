@@ -1,5 +1,8 @@
 package ro.campuscompass.mobile.navigation
 
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -8,8 +11,13 @@ import ro.campuscompass.mobile.MainPage
 import ro.campuscompass.mobile.screens.auth.LandlordLogin
 import ro.campuscompass.mobile.screens.auth.LandlordRegister
 import ro.campuscompass.mobile.screens.auth.StudentLogin
+import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
+import ro.campuscompass.mobile.services.auth.SignInViewModel
 
-fun NavGraphBuilder.authNavGraph(navController: NavController) {
+fun NavGraphBuilder.authNavGraph(
+    navController: NavController,
+    emailAndPasswordClient: EmailAndPasswordClient
+) {
     navigation(
         route = Graph.AUTH,
         startDestination = AuthScreen.MainLogin.route
@@ -32,6 +40,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
         }
         composable(AuthScreen.LandlordLogin.route) {
             LandlordLogin(
+                emailAndPasswordClient =     emailAndPasswordClient,
                 onLoginClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.LANDLORD)
@@ -41,7 +50,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavController) {
             )
         }
         composable(AuthScreen.LandlordRegister.route) {
+            val viewModel = viewModel<SignInViewModel>()
+            val state by viewModel.state.collectAsStateWithLifecycle()
+
             LandlordRegister(
+                state = state,
                 onRegisterClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.LANDLORD)

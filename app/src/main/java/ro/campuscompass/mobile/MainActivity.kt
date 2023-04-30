@@ -9,9 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import ro.campuscompass.mobile.navigation.RootNavigationGraph
+import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
 import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 class MainActivity : ComponentActivity() {
+    private val emailAndPasswordClient by lazy {
+        EmailAndPasswordClient()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -20,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RootNavigationGraph(navController = rememberNavController())
+                    RootNavigationGraph(navController = rememberNavController(), emailAndPasswordClient = emailAndPasswordClient)
                 }
             }
         }
