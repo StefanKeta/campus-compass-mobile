@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.ui.theme
+package ro.campuscompass.mobile.ui.theme
 
 import android.app.Activity
 import android.os.Build

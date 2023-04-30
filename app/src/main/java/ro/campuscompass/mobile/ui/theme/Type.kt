@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.ui.theme
+package ro.campuscompass.mobile.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,13 +1,13 @@
-package com.example.campuscompassmobile.navigation
+package ro.campuscompass.mobile.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.campuscompassmobile.MainPage
-import com.example.campuscompassmobile.screens.auth.LandlordLogin
-import com.example.campuscompassmobile.screens.auth.LandlordRegister
-import com.example.campuscompassmobile.screens.auth.StudentLogin
+import ro.campuscompass.mobile.MainPage
+import ro.campuscompass.mobile.screens.auth.LandlordLogin
+import ro.campuscompass.mobile.screens.auth.LandlordRegister
+import ro.campuscompass.mobile.screens.auth.StudentLogin
 
 fun NavGraphBuilder.authNavGraph(navController: NavController) {
     navigation(

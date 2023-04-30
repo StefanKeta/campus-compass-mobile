@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.screens.utils
+package ro.campuscompass.mobile.screens.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.campuscompassmobile.R
+import ro.campuscompass.mobile.R
 
 @Composable
 fun PasswordTextField(

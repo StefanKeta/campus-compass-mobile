@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.screens.auth
+package ro.campuscompass.mobile.screens.auth
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,26 +16,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.campuscompassmobile.R
-import com.example.campuscompassmobile.screens.utils.AuthText
-import com.example.campuscompassmobile.screens.utils.EmailTextField
-import com.example.campuscompassmobile.screens.utils.PasswordTextField
-import com.example.campuscompassmobile.screens.utils.isEmailValid
-import com.example.campuscompassmobile.ui.theme.CampusCompassMobileTheme
-
+import ro.campuscompass.mobile.R
+import ro.campuscompass.mobile.screens.utils.AuthText
+import ro.campuscompass.mobile.screens.utils.EmailTextField
+import ro.campuscompass.mobile.screens.utils.PasswordTextField
+import ro.campuscompass.mobile.screens.utils.isEmailValid
+import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
-fun LandlordLogin(
-    onLoginClick: () -> Unit,
-    onDontHaveAccountClick: () -> Unit,
+fun LandlordRegister(
+    onRegisterClick: () -> Unit,
+    onAlreadyRegisteredClick: () -> Unit,
 ) {
-    // TODO: Implement login functionality
+    // TODO: Implement register functionality
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     val isButtonEnabled by remember {
         derivedStateOf {
-            isEmailValid(email) && password.isNotEmpty()
+            isEmailValid(email) && password.isNotEmpty() && password == confirmPassword
         }
     }
 
@@ -44,7 +44,7 @@ fun LandlordLogin(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AuthText(R.string.landlord_login)
+        AuthText(R.string.landlord_register)
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround,
@@ -58,13 +58,23 @@ fun LandlordLogin(
                 password = password,
                 onPasswordChange = { password = it },
             )
-            Text(stringResource(R.string.dont_have_account),
-                Modifier.clickable { onDontHaveAccountClick() })
+            PasswordTextField(
+                confirmPassword,
+                onPasswordChange = {
+                    confirmPassword = it
+                },
+                errorMessage = if (password != confirmPassword) stringResource(R.string.passwords_dont_match) else null,
+                label = stringResource(R.string.prompt_confirm_password)
+            )
+            Text(stringResource(R.string.already_registered),
+                Modifier.clickable { onAlreadyRegisteredClick() })
             Button(
                 enabled = isButtonEnabled,
-                onClick = onLoginClick
+                onClick = {
+                    onRegisterClick()
+                }
             ) {
-                Text(stringResource(R.string.login))
+                Text(stringResource(R.string.register))
             }
         }
     }
@@ -72,11 +82,11 @@ fun LandlordLogin(
 
 @Preview(showBackground = true)
 @Composable
-private fun LandlordLoginPreview() {
+private fun LandlordRegisterPreview() {
     CampusCompassMobileTheme {
-        LandlordLogin(
-            onLoginClick = {},
-            onDontHaveAccountClick = {}
+        LandlordRegister(
+            onRegisterClick = {},
+            onAlreadyRegisteredClick = {}
         )
     }
 }

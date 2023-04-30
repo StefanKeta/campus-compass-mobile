@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile
+package ro.campuscompass.mobile
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.campuscompassmobile.navigation.RootNavigationGraph
-import com.example.campuscompassmobile.ui.theme.CampusCompassMobileTheme
+import ro.campuscompass.mobile.navigation.RootNavigationGraph
+import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

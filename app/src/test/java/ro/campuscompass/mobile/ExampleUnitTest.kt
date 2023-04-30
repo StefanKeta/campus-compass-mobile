@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile
+package ro.campuscompass.mobile
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.screens.auth
+package ro.campuscompass.mobile.screens.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.campuscompassmobile.R
-import com.example.campuscompassmobile.screens.utils.AuthText
-import com.example.campuscompassmobile.screens.utils.EmailTextField
-import com.example.campuscompassmobile.screens.utils.PasswordTextField
-import com.example.campuscompassmobile.screens.utils.isEmailValid
-import com.example.campuscompassmobile.ui.theme.CampusCompassMobileTheme
+import ro.campuscompass.mobile.R
+import ro.campuscompass.mobile.screens.utils.AuthText
+import ro.campuscompass.mobile.screens.utils.EmailTextField
+import ro.campuscompass.mobile.screens.utils.PasswordTextField
+import ro.campuscompass.mobile.screens.utils.isEmailValid
+import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 
 @Composable

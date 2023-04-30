@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile
+package ro.campuscompass.mobile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.campuscompassmobile.screens.utils.AuthText
-import com.example.campuscompassmobile.ui.theme.CampusCompassMobileTheme
+import ro.campuscompass.mobile.screens.utils.AuthText
+import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
 fun MainPage(

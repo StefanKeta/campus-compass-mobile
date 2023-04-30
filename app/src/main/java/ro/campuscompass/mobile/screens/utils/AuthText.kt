@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.screens.utils
+package ro.campuscompass.mobile.screens.utils
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text

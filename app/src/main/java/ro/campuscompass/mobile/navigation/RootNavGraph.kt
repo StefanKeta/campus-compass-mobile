@@ -1,4 +1,4 @@
-package com.example.campuscompassmobile.navigation
+package ro.campuscompass.mobile.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

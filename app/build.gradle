@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.campuscompassmobile'
+    namespace 'ro.campuscompass.mobile'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.campuscompassmobile"
+        applicationId "ro.campuscompass.mobile"
         minSdk 24
         targetSdk 33
         versionCode 1
