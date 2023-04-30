@@ -15,6 +15,6 @@ fun AuthText(
     Text(
         stringResource(id = textId),
         fontSize = 30.sp,
-        modifier = Modifier.padding(top = 200.dp)
+        modifier = Modifier.padding(top = 64.dp, bottom = 64.dp)
     )
 }
