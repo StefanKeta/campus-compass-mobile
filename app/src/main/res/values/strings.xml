@@ -18,4 +18,5 @@
     <string name="prompt_confirm_password">Confirm Password</string>
     <string name="passwords_dont_match">Passwords don\'t match</string>
     <string name="invalid_email">Email is invalid</string>
+    <string name="password_too_short">Password should be at least 6 characters</string>
 </resources>

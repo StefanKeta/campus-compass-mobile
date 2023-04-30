@@ -28,50 +28,50 @@ import ro.campuscompass.mobile.screens.utils.EmailTextField
 import ro.campuscompass.mobile.screens.utils.PasswordTextField
 import ro.campuscompass.mobile.screens.utils.isEmailValid
 import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
+import ro.campuscompass.mobile.services.auth.SignInResult
 import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 
 @Composable
 fun LandlordLogin(
     emailAndPasswordClient: EmailAndPasswordClient,
-    onLoginClick: () -> Unit,
+    onLoginClick: (SignInResult) -> Unit,
     onDontHaveAccountClick: () -> Unit,
 ) {
     val context = LocalContext.current
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isSignInInProgress by remember { mutableStateOf(false) }
+    val isButtonEnabled by remember {
+        derivedStateOf {
+            isEmailValid(email) && password.isNotEmpty()
+        }
+    }
+    var loginInProgress by remember { mutableStateOf(false) }
     val loginCoroutineScope = rememberCoroutineScope()
 
-    val signInError = remember { mutableStateOf<String?>(null) }
+    val logInError = remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(key1 = signInError.value) {
-        signInError.value?.let { error ->
+    LaunchedEffect(key1 = logInError.value) {
+        logInError.value?.let { error ->
             Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
         }
     }
 
     val onLoginButtonClick: () -> Unit = {
-        isSignInInProgress = true
+        loginInProgress = true
         loginCoroutineScope.launch {
-            val (_, error) = emailAndPasswordClient.login(
+            val signInResult = emailAndPasswordClient.login(
                 email = email,
                 password = password,
             )
 
-            if (error == null) {
-                onLoginClick()
+            if (signInResult.error == null) {
+                onLoginClick(signInResult)
                 return@launch
             }
-            signInError.value = error
-            isSignInInProgress = false
-        }
-    }
-
-    val isButtonEnabled by remember {
-        derivedStateOf {
-            isEmailValid(email) && password.isNotEmpty()
+            logInError.value = signInResult.error
+            loginInProgress = false
         }
     }
 
@@ -97,7 +97,7 @@ fun LandlordLogin(
             Text(
                 stringResource(R.string.dont_have_account),
                 Modifier.clickable { onDontHaveAccountClick() })
-            if (isSignInInProgress) {
+            if (loginInProgress) {
                 CircularProgressIndicator()
             }
             Button(
