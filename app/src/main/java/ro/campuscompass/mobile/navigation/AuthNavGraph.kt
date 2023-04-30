@@ -33,10 +33,13 @@ fun NavGraphBuilder.authNavGraph(
         composable(AuthScreen.StudentLogin.route) {
             val viewModel = viewModel<SignInViewModel>()
 
-            StudentLogin(onLoginClick = {
-                navController.popBackStack()
-                navController.navigate(Graph.STUDENT)
-            })
+            StudentLogin(
+                emailAndPasswordClient = emailAndPasswordClient,
+                onLoginClick = {
+                    viewModel.onSignInResult(it)
+                    navController.popBackStack()
+                    navController.navigate(Graph.STUDENT)
+                })
         }
         composable(AuthScreen.LandlordLogin.route) {
             val viewModel = viewModel<SignInViewModel>()
