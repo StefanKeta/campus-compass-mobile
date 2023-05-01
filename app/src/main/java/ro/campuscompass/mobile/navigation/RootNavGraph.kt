@@ -3,16 +3,15 @@ package ro.campuscompass.mobile.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
 
 @Composable
 fun RootNavigationGraph(
-    navController: NavHostController,
+        navController: NavHostController,
 ) {
-    NavHost(navController = navController, route = Graph.ROOT, startDestination = Graph.AUTH ) {
+    NavHost(navController = navController, route = Graph.ROOT, startDestination = Graph.AUTH) {
         authNavGraph(navController = navController)
-//        studentNavGraph(navController = navController)
-//        landlordNavGraph(navController = navController)
+        studentNavGraph(navController = navController)
+        landlordNavGraph(navController = navController)
     }
 }
 

@@ -14,53 +14,53 @@ fun NavGraphBuilder.authNavGraph(
 ) {
     navigation(
         route = Graph.AUTH,
-        startDestination = AuthScreen.MainLogin.route
+        startDestination = AuthNavGraph.MainLogin.route
     ) {
-        composable(AuthScreen.MainLogin.route) {
+        composable(AuthNavGraph.MainLogin.route) {
             MainPage(
                 studentLoginClick = {
-                    navController.navigate(AuthScreen.StudentLogin.route)
+                    navController.navigate(AuthNavGraph.StudentLogin.route)
                 },
                 landlordLoginClick = {
-                    navController.navigate(AuthScreen.LandlordLogin.route)
+                    navController.navigate(AuthNavGraph.LandlordLogin.route)
                 }
             )
         }
-        composable(AuthScreen.StudentLogin.route) {
+        composable(AuthNavGraph.StudentLogin.route) {
             StudentLogin(
                 onLoginClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.STUDENT)
                 })
         }
-        composable(AuthScreen.LandlordLogin.route) {
+        composable(AuthNavGraph.LandlordLogin.route) {
             LandlordLogin(
                 onLoginClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.LANDLORD)
                 },
                 onDontHaveAccountClick = {
-                    navController.navigate(AuthScreen.LandlordRegister.route)
+                    navController.navigate(AuthNavGraph.LandlordRegister.route)
                 }
             )
         }
-        composable(AuthScreen.LandlordRegister.route) {
+        composable(AuthNavGraph.LandlordRegister.route) {
             LandlordRegister(
                 onRegisterClick = {
                     navController.popBackStack()
                     navController.navigate(Graph.LANDLORD)
                 },
                 onAlreadyRegisteredClick = {
-                    navController.navigate(AuthScreen.LandlordLogin.route)
+                    navController.navigate(AuthNavGraph.LandlordLogin.route)
                 }
             )
         }
     }
 }
 
-sealed class AuthScreen(val route: String) {
-    object MainLogin : AuthScreen("MAIN_LOGIN")
-    object StudentLogin : AuthScreen("STUDENT_LOGIN")
-    object LandlordRegister : AuthScreen("LANDLORD_REGISTER")
-    object LandlordLogin : AuthScreen("LANDLORD_LOGIN")
+sealed class AuthNavGraph(val route: String) {
+    object MainLogin : AuthNavGraph("main_login")
+    object StudentLogin : AuthNavGraph("student_login")
+    object LandlordRegister : AuthNavGraph("landlord_register")
+    object LandlordLogin : AuthNavGraph("landlord_login")
 }
