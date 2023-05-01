@@ -1,6 +1,5 @@
 package ro.campuscompass.mobile.navigation
 
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -9,12 +8,9 @@ import ro.campuscompass.mobile.MainPage
 import ro.campuscompass.mobile.screens.auth.LandlordLogin
 import ro.campuscompass.mobile.screens.auth.LandlordRegister
 import ro.campuscompass.mobile.screens.auth.StudentLogin
-import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
-import ro.campuscompass.mobile.services.auth.SignInViewModel
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavController,
-    emailAndPasswordClient: EmailAndPasswordClient
 ) {
     navigation(
         route = Graph.AUTH,
@@ -31,23 +27,15 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
         composable(AuthScreen.StudentLogin.route) {
-            val viewModel = viewModel<SignInViewModel>()
-
             StudentLogin(
-                emailAndPasswordClient = emailAndPasswordClient,
                 onLoginClick = {
-                    viewModel.onSignInResult(it)
                     navController.popBackStack()
                     navController.navigate(Graph.STUDENT)
                 })
         }
         composable(AuthScreen.LandlordLogin.route) {
-            val viewModel = viewModel<SignInViewModel>()
-
             LandlordLogin(
-                emailAndPasswordClient = emailAndPasswordClient,
                 onLoginClick = {
-                    viewModel.onSignInResult(it)
                     navController.popBackStack()
                     navController.navigate(Graph.LANDLORD)
                 },
@@ -57,12 +45,8 @@ fun NavGraphBuilder.authNavGraph(
             )
         }
         composable(AuthScreen.LandlordRegister.route) {
-            val viewModel = viewModel<SignInViewModel>()
-
             LandlordRegister(
-                emailAndPasswordClient = emailAndPasswordClient,
                 onRegisterClick = {
-                    viewModel.onSignInResult(it)
                     navController.popBackStack()
                     navController.navigate(Graph.LANDLORD)
                 },

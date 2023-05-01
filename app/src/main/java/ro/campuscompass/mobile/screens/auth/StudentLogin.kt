@@ -8,35 +8,33 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 import ro.campuscompass.mobile.R
 import ro.campuscompass.mobile.screens.utils.AuthText
 import ro.campuscompass.mobile.screens.utils.EmailTextField
 import ro.campuscompass.mobile.screens.utils.PasswordTextField
 import ro.campuscompass.mobile.screens.utils.isEmailValid
-import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
-import ro.campuscompass.mobile.services.auth.SignInResult
 import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 
 @Composable
 fun StudentLogin(
-    emailAndPasswordClient: EmailAndPasswordClient,
-    onLoginClick: (SignInResult) -> Unit,
+    onLoginClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    val viewModel = getViewModel<SignInViewModel>()
+    val isLoginInProgress = viewModel.isLoading.collectAsState()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -46,31 +44,11 @@ fun StudentLogin(
         }
     }
 
-    var loginInProgress by remember { mutableStateOf(false) }
-    val loginCoroutineScope = rememberCoroutineScope()
-
-    val logInError = remember { mutableStateOf<String?>(null) }
-
-    LaunchedEffect(key1 = logInError.value) {
-        logInError.value?.let { error ->
-            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     val onLoginButtonClick: () -> Unit = {
-        loginInProgress = true
-        loginCoroutineScope.launch {
-            val signInResult = emailAndPasswordClient.login(
-                email = email,
-                password = password,
-            )
-
-            if (signInResult.error == null) {
-                onLoginClick(signInResult)
-                return@launch
-            }
-            logInError.value = signInResult.error
-            loginInProgress = false
+        viewModel.loginAsStudent(email, password, onLoginClick) {
+            Toast.makeText(
+                context, it, Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -93,7 +71,7 @@ fun StudentLogin(
                 password = password,
                 onPasswordChange = { password = it },
             )
-            if (loginInProgress) {
+            if (isLoginInProgress.value) {
                 CircularProgressIndicator()
             }
             Button(
@@ -112,7 +90,6 @@ private fun StudentLoginPreview() {
     CampusCompassMobileTheme {
         StudentLogin(
             onLoginClick = {},
-            emailAndPasswordClient = EmailAndPasswordClient(),
         )
     }
 }

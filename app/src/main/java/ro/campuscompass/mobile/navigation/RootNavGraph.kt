@@ -8,10 +8,9 @@ import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
 @Composable
 fun RootNavigationGraph(
     navController: NavHostController,
-    emailAndPasswordClient: EmailAndPasswordClient
 ) {
     NavHost(navController = navController, route = Graph.ROOT, startDestination = Graph.AUTH ) {
-        authNavGraph(navController = navController, emailAndPasswordClient = emailAndPasswordClient)
+        authNavGraph(navController = navController)
 //        studentNavGraph(navController = navController)
 //        landlordNavGraph(navController = navController)
     }

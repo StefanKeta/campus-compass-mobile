@@ -3,40 +3,29 @@ package ro.campuscompass.mobile.services.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import ro.campuscompass.mobile.models.ModelResult
+import ro.campuscompass.mobile.models.SignInResult
 import java.util.concurrent.CancellationException
 
-class EmailAndPasswordClient(
-) {
+class EmailAndPasswordClient {
     private val auth = Firebase.auth
 
-    fun getCurrentUser() = auth.currentUser?.run {
-        UserData(
-            userId = uid
-        )
-    }
+    fun getCurrentUser(): ModelResult<SignInResult>? =
+        auth.currentUser?.let { ModelResult.success(SignInResult(it.uid)) }
 
-    suspend fun login(email: String, password: String): SignInResult {
+    suspend fun login(email: String, password: String): ModelResult<SignInResult> {
         return try {
             val user = auth.signInWithEmailAndPassword(email, password)
                 .await()
-                .user
-            SignInResult(
-                userData = user?.run {
-                    UserData(
-                        userId = uid
-                    )
-                },
-                error = null
-            )
+                .user ?: return ModelResult.error("User is null")
+
+            ModelResult.success(SignInResult(user.uid))
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is CancellationException) {
                 throw e
             }
-            SignInResult(
-                userData = null,
-                error = e.message
-            )
+            ModelResult.error(e.message)
         }
     }
 
@@ -44,27 +33,18 @@ class EmailAndPasswordClient(
         auth.signOut()
     }
 
-    suspend fun register(email: String, password: String): SignInResult {
+    suspend fun register(email: String, password: String): ModelResult<SignInResult> {
         return try {
             val user = auth.createUserWithEmailAndPassword(email, password)
-                .await().user
-            SignInResult(
-                userData = user?.run {
-                    UserData(
-                        userId = uid
-                    )
-                },
-                error = null
-            )
+                .await().user ?: return ModelResult.error("User is null")
+
+            ModelResult.success(SignInResult(user.uid))
         } catch (e: Exception) {
             e.printStackTrace()
             if (e is CancellationException) {
                 throw e
             }
-            SignInResult(
-                userData = null,
-                error = e.message
-            )
+            ModelResult.error(e.message)
         }
     }
 }

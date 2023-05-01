@@ -9,35 +9,34 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 import ro.campuscompass.mobile.R
 import ro.campuscompass.mobile.screens.utils.AuthText
 import ro.campuscompass.mobile.screens.utils.EmailTextField
 import ro.campuscompass.mobile.screens.utils.PasswordTextField
 import ro.campuscompass.mobile.screens.utils.isEmailValid
-import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
-import ro.campuscompass.mobile.services.auth.SignInResult
 import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
 fun LandlordRegister(
-    emailAndPasswordClient: EmailAndPasswordClient,
-    onRegisterClick: (SignInResult) -> Unit,
+    onRegisterClick: () -> Unit,
     onAlreadyRegisteredClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    val viewModel = getViewModel<SignInViewModel>()
+    val isRegisterInProgress = viewModel.isLoading.collectAsState()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -47,31 +46,11 @@ fun LandlordRegister(
         }
     }
 
-    var registerInProgress by remember { mutableStateOf(false) }
-    val registerCoroutineScope = rememberCoroutineScope()
-
-    val registerError = remember { mutableStateOf<String?>(null) }
-
-    LaunchedEffect(key1 = registerError.value) {
-        registerError.value?.let { error ->
-            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-        }
-    }
-
     val onRegisterButtonClick: () -> Unit = {
-        registerInProgress = true
-        registerCoroutineScope.launch {
-            val signInResult = emailAndPasswordClient.register(
-                email = email,
-                password = password,
-            )
-
-            if (signInResult.error == null) {
-                onRegisterClick(signInResult)
-                return@launch
-            }
-            registerError.value = signInResult.error
-            registerInProgress = false
+        viewModel.registerAsLandlord(email, password, onRegisterClick) {
+            Toast.makeText(
+                context, it, Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -103,7 +82,7 @@ fun LandlordRegister(
             )
             Text(stringResource(R.string.already_registered),
                 Modifier.clickable { onAlreadyRegisteredClick() })
-            if (registerInProgress) {
+            if (isRegisterInProgress.value) {
                 CircularProgressIndicator()
             }
             Button(
@@ -123,7 +102,6 @@ private fun LandlordRegisterPreview() {
         LandlordRegister(
             onRegisterClick = {},
             onAlreadyRegisteredClick = {},
-            emailAndPasswordClient = EmailAndPasswordClient(),
         )
     }
 }
