@@ -19,4 +19,21 @@
     <string name="passwords_dont_match">Passwords don\'t match</string>
     <string name="invalid_email">Email is invalid</string>
     <string name="password_too_short">Password should be at least 6 characters</string>
+    <!-- Landlord constants -->
+    <string name="landlord_page_title">My Properties</string>
+    <string name="landlord_add_property_page_title">Add New Property</string>
+    <string name="landlord_property_name">Property Name</string>
+    <string name="landlord_property_address">Address</string>
+    <string name="landlord_property_description">Description</string>
+    <string name="landlord_property_price">Price per night</string>
+    <string name="landlord_property_bedrooms">Bedrooms</string>
+    <string name="landlord_property_name_required">Property Name is required</string>
+    <string name="landlord_property_address_required">Address is required</string>
+    <string name="landlord_property_description_required">Description is required</string>
+    <string name="landlord_property_price_required">Price per night is required</string>
+    <string name="landlord_property_bedrooms_required">Bedrooms is required</string>
+    <string name="landlord_property_available_from">Available From</string>
+    <string name="landlord_add_property">Add Property</string>
+    <string name="landlord_page_error_message">Something went wrong while getting properties</string>
+    <string name="landlord_no_properties">No properties yet</string>
 </resources>

@@ -15,7 +15,9 @@ fun NavGraphBuilder.landlordNavGraph(
     ) {
         composable(LandlordNavGraph.LandlordMainPage.route) {
             LandlordMainPage(
-
+                    onAddPropertyClick = {
+                        navController.navigate(LandlordNavGraph.AddProperty.route)
+                    }
             )
         }
     }
@@ -23,4 +25,5 @@ fun NavGraphBuilder.landlordNavGraph(
 
 sealed class LandlordNavGraph(val route: String) {
     object LandlordMainPage : LandlordNavGraph("landlord_main_page")
+    object AddProperty : LandlordNavGraph("landlord_add_property")
 }

@@ -9,8 +9,8 @@ import ro.campuscompass.mobile.repository.entities.UserInfoEntity
 private const val USERS = "users"
 
 class AuthenticationService(
-    private val emailAndPasswordClient: EmailAndPasswordClient,
-    private val repository: Repository,
+        private val emailAndPasswordClient: EmailAndPasswordClient,
+        private val repository: Repository,
 ) {
     suspend fun loginAsStudent(email: String, password: String): ModelResult<UserInfo> {
         return login(email, password).flatmap {
@@ -41,9 +41,19 @@ class AuthenticationService(
     suspend fun registerLandlord(email: String, password: String): ModelResult<UserInfo> {
         return emailAndPasswordClient.register(email, password).map {
             UserInfo(
-                userId = it.userId,
-                userType = UserType.LANDLORD,
+                    userId = it.userId,
+                    userType = UserType.LANDLORD,
             )
+        }.flatmap { userInfo ->
+            repository.setDocument(
+                    USERS,
+                    userInfo.userId,
+                    UserInfoEntity(
+                            userType = userInfo.userType,
+                    )
+            ).map {
+                userInfo
+            }
         }
     }
 
@@ -51,13 +61,13 @@ class AuthenticationService(
         return emailAndPasswordClient.login(email, password).flatmap { signInResult ->
             println("Fetching user info for ${signInResult.userId}")
             repository.getDocument(USERS, signInResult.userId, UserInfoEntity::class.java)
-                .map { document ->
-                    println("User is $document")
-                    UserInfo(
-                        userId = signInResult.userId,
-                        userType = document.userType,
-                    )
-                }
+                    .map { document ->
+                        println("User is $document")
+                        UserInfo(
+                                userId = signInResult.userId,
+                                userType = document.userType,
+                        )
+                    }
         }
     }
 }
