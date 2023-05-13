@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import ro.campuscompass.mobile.screens.landlord.LandlordMainPage
+import ro.campuscompass.mobile.screens.landlord.addproperty.LandlordAddPropertyPage
 
 fun NavGraphBuilder.landlordNavGraph(
         navController: NavController,
@@ -17,6 +18,13 @@ fun NavGraphBuilder.landlordNavGraph(
             LandlordMainPage(
                     onAddPropertyClick = {
                         navController.navigate(LandlordNavGraph.AddProperty.route)
+                    }
+            )
+        }
+        composable(LandlordNavGraph.AddProperty.route) {
+            LandlordAddPropertyPage(
+                    onAddPropertyClick = {
+                        navController.popBackStack()
                     }
             )
         }

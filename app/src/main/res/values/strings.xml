@@ -36,4 +36,5 @@
     <string name="landlord_add_property">Add Property</string>
     <string name="landlord_page_error_message">Something went wrong while getting properties</string>
     <string name="landlord_no_properties">No properties yet</string>
+    <string name="landlord_universities_label">Universities</string>
 </resources>
