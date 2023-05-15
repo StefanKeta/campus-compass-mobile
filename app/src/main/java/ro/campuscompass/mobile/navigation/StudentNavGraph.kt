@@ -6,11 +6,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import ro.campuscompass.mobile.screens.student.StudentApplicationPage
 import ro.campuscompass.mobile.screens.student.StudentMainPage
 
 const val UNIVERSITY_ID = "uniId"
 const val STUDENT_ID = "studentId"
-const val SELECTED_OFFER = "selectedOffer"
+const val SELECTED_OFFER_ID = "selectedOfferId"
 
 fun NavGraphBuilder.studentNavGraph(
         navController: NavController,
@@ -23,7 +24,8 @@ fun NavGraphBuilder.studentNavGraph(
             StudentMainPage(studentId, uniId, selectedOfferId)
         }
         composable(route = StudentNavGraph.StudentApplicationPage.route) {
-
+            val offerId = requireNotNull(it.arguments?.getString(SELECTED_OFFER_ID))
+            StudentApplicationPage(offerId = offerId)
         }
     }
 }
@@ -35,7 +37,7 @@ sealed class StudentNavGraph(val route: String) {
         }
     }
 
-    object StudentApplicationPage : StudentNavGraph("student_application/{$SELECTED_OFFER}") {
+    object StudentApplicationPage : StudentNavGraph("student_application/{$SELECTED_OFFER_ID}") {
         fun withOfferId(offerId: String): String {
             return "student_application/$offerId"
         }

@@ -26,6 +26,27 @@ class Repository {
         }
     }
 
+
+    suspend fun <T> getCollectionByFilter(
+            collectionName: String,
+            clazz: Class<T>,
+            filter: Pair<String,Any>
+    ): ModelResult<List<(T)>> {
+        return suspendCancellableCoroutine { cont ->
+            db.collection(collectionName)
+                    .whereEqualTo(filter.first,filter.second)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val list = result.toObjects(clazz)
+                        cont.resumeWith(Result.success(ModelResult.success(list)))
+                    }
+                    .addOnFailureListener { exception ->
+                        println("Error getting documents: $exception")
+                        cont.resumeWith(Result.success(ModelResult.error(exception.message)))
+                    }
+        }
+    }
+
     suspend fun <T> getDocument(
         collectionName: String,
         documentId: String,
