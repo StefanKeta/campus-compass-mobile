@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import org.koin.androidx.compose.getViewModel
 import ro.campuscompass.mobile.R
 import ro.campuscompass.mobile.screens.utils.AuthText
@@ -30,7 +31,7 @@ import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
 fun StudentLogin(
-    onLoginClick: () -> Unit,
+    onLoginClick: (String,String) -> Unit,
 ) {
     val context = LocalContext.current
     val viewModel = getViewModel<SignInViewModel>()
@@ -89,7 +90,7 @@ fun StudentLogin(
 private fun StudentLoginPreview() {
     CampusCompassMobileTheme {
         StudentLogin(
-            onLoginClick = {},
+            onLoginClick = {_,_ -> {}},
         )
     }
 }

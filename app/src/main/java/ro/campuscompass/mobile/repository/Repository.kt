@@ -27,9 +27,9 @@ class Repository {
     }
 
     suspend fun <T> getDocument(
-            collectionName: String,
-            documentId: String,
-            clazz: Class<T>,
+        collectionName: String,
+        documentId: String,
+        clazz: Class<T>,
     ): ModelResult<T> {
         return suspendCancellableCoroutine { cont ->
             db.collection(collectionName)
@@ -77,4 +77,14 @@ class Repository {
                     }
         }
     }
+
+    suspend fun updateDocument(collectionName: String, documentId: String, fieldsToUpdate: Map<String, Any>): ModelResult<Int> {
+        return suspendCancellableCoroutine { cont ->
+            db.collection(collectionName).document(documentId).update(fieldsToUpdate).addOnSuccessListener {
+                cont.resumeWith(Result.success(ModelResult.success(1)))
+            }
+        }
+    }
+
+
 }

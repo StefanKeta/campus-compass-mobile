@@ -8,16 +8,16 @@ import androidx.navigation.compose.NavHost
 fun RootNavigationGraph(
         navController: NavHostController,
 ) {
-    NavHost(navController = navController, route = Graph.ROOT, startDestination = Graph.AUTH) {
+    NavHost(navController = navController, route = Graph.ROOT.route, startDestination = Graph.AUTH.route) {
         authNavGraph(navController = navController)
         studentNavGraph(navController = navController)
         landlordNavGraph(navController = navController)
     }
 }
 
-object Graph {
-    const val ROOT = "root_graph"
-    const val AUTH = "auth_graph"
-    const val STUDENT = "student_graph"
-    const val LANDLORD = "landlord_graph"
+sealed class Graph(val route: String) {
+    object ROOT : Graph("root_graph")
+    object AUTH : Graph("auth_graph")
+    object STUDENT : Graph("student_graph")
+    object LANDLORD : Graph("landlord_graph")
 }

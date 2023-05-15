@@ -2,25 +2,42 @@ package ro.campuscompass.mobile.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import ro.campuscompass.mobile.screens.student.StudentMainPage
+
+const val UNIVERSITY_ID = "uniId"
+const val STUDENT_ID = "studentId"
+const val SELECTED_OFFER = "selectedOffer"
 
 fun NavGraphBuilder.studentNavGraph(
         navController: NavController,
 ) {
-    navigation(
-            route = Graph.STUDENT,
-            startDestination = StudentNavGraph.StudentMainPage.route
-    ) {
-        composable(StudentNavGraph.StudentMainPage.route) {
-            StudentMainPage(
+    navigation(route = Graph.STUDENT.route, startDestination = StudentNavGraph.StudentMainPage.route) {
+        composable(StudentNavGraph.StudentMainPage.route, arguments = listOf(navArgument(STUDENT_ID) { type = NavType.StringType }, navArgument(UNIVERSITY_ID) { type = NavType.StringType })) {
+            val studentId = requireNotNull(it.arguments?.getString(STUDENT_ID))
+            val uniId = requireNotNull(it.arguments?.getString(UNIVERSITY_ID))
+            val selectedOfferId: (String) -> Unit = { offerId -> navController.navigate(StudentNavGraph.StudentApplicationPage.withOfferId(offerId)) }
+            StudentMainPage(studentId, uniId, selectedOfferId)
+        }
+        composable(route = StudentNavGraph.StudentApplicationPage.route) {
 
-            )
         }
     }
 }
 
 sealed class StudentNavGraph(val route: String) {
-    object StudentMainPage : StudentNavGraph("student_main_page")
+    object StudentMainPage : StudentNavGraph("student_main/{$STUDENT_ID}/{$UNIVERSITY_ID}") {
+        fun withStudentIdAndUniId(studentId: String, uniId: String): String {
+            return "student_main/$studentId/$uniId"
+        }
+    }
+
+    object StudentApplicationPage : StudentNavGraph("student_application/{$SELECTED_OFFER}") {
+        fun withOfferId(offerId: String): String {
+            return "student_application/$offerId"
+        }
+    }
 }
