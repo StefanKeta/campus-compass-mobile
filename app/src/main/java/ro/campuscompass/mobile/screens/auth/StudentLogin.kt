@@ -1,5 +1,6 @@
 package ro.campuscompass.mobile.screens.auth
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import org.koin.androidx.compose.getViewModel
 import ro.campuscompass.mobile.R
+import ro.campuscompass.mobile.models.Offer
+import ro.campuscompass.mobile.screens.student.StudentMainViewModel
 import ro.campuscompass.mobile.screens.utils.AuthText
 import ro.campuscompass.mobile.screens.utils.EmailTextField
 import ro.campuscompass.mobile.screens.utils.PasswordTextField
@@ -31,10 +34,13 @@ import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
 fun StudentLogin(
-    onLoginClick: (String,String) -> Unit,
+        onLoginClick: (String, String) -> Unit,
+        onOfferSelected: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val viewModel = getViewModel<SignInViewModel>()
+    val studentViewModel = getViewModel<StudentMainViewModel>()
+
     val isLoginInProgress = viewModel.isLoading.collectAsState()
 
     var email by remember { mutableStateOf("") }
@@ -45,39 +51,37 @@ fun StudentLogin(
         }
     }
 
+    val checkIfStudentApplied: (String, String) -> Unit = { studentId, uniId -> studentViewModel.checkIfStudentTookOffer(studentId) {
+        offer -> Log.d("StudentOffer", "StudentLogin: $offer");if (offer != null) onOfferSelected(offer.offerId) else onLoginClick(studentId, uniId) }
+    }
+
     val onLoginButtonClick: () -> Unit = {
-        viewModel.loginAsStudent(email, password, onLoginClick) {
-            Toast.makeText(
-                context, it, Toast.LENGTH_LONG
-            ).show()
+        viewModel.loginAsStudent(email, password, checkIfStudentApplied) {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AuthText(R.string.student_login)
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
             EmailTextField(
-                email = email,
-                onEmailChange = { email = it },
+                    email = email,
+                    onEmailChange = { email = it },
             )
             PasswordTextField(
-                password = password,
-                onPasswordChange = { password = it },
+                    password = password,
+                    onPasswordChange = { password = it },
             )
             if (isLoginInProgress.value) {
                 CircularProgressIndicator()
             }
             Button(
-                enabled = isButtonEnabled,
-                onClick = onLoginButtonClick,
+                    enabled = isButtonEnabled,
+                    onClick = onLoginButtonClick,
             ) {
                 Text(stringResource(R.string.login))
             }
@@ -89,8 +93,6 @@ fun StudentLogin(
 @Composable
 private fun StudentLoginPreview() {
     CampusCompassMobileTheme {
-        StudentLogin(
-            onLoginClick = {_,_ -> {}},
-        )
+        StudentLogin(onLoginClick = { _, _ -> {} }, onOfferSelected = {})
     }
 }

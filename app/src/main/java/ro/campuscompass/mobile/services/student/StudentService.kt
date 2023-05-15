@@ -21,4 +21,8 @@ class StudentService(private val repository: Repository) {
     suspend fun retrieveAppliedOffer(offerId: String): ModelResult<Offer> {
         return repository.getDocument(OFFERS_COL, offerId, Offer::class.java)
     }
+
+    suspend fun checkIfStudentApplied(studentId:String):ModelResult<Offer?>{
+        return repository.getDocumentByFilter(OFFERS_COL,"takenBy",studentId,Offer::class.java)
+    }
 }

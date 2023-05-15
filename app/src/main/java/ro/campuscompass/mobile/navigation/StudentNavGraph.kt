@@ -20,7 +20,7 @@ fun NavGraphBuilder.studentNavGraph(
         composable(StudentNavGraph.StudentMainPage.route, arguments = listOf(navArgument(STUDENT_ID) { type = NavType.StringType }, navArgument(UNIVERSITY_ID) { type = NavType.StringType })) {
             val studentId = requireNotNull(it.arguments?.getString(STUDENT_ID))
             val uniId = requireNotNull(it.arguments?.getString(UNIVERSITY_ID))
-            val selectedOfferId: (String) -> Unit = { offerId -> navController.navigate(StudentNavGraph.StudentApplicationPage.withOfferId(offerId)) }
+            val selectedOfferId: (String) -> Unit = { offerId -> navController.popBackStack();navController.navigate(StudentNavGraph.StudentApplicationPage.withOfferId(offerId)) }
             StudentMainPage(studentId, uniId, selectedOfferId)
         }
         composable(route = StudentNavGraph.StudentApplicationPage.route) {

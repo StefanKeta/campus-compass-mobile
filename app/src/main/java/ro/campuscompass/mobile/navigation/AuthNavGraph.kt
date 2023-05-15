@@ -1,5 +1,6 @@
 package ro.campuscompass.mobile.navigation
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -8,6 +9,7 @@ import ro.campuscompass.mobile.MainPage
 import ro.campuscompass.mobile.screens.auth.LandlordLogin
 import ro.campuscompass.mobile.screens.auth.LandlordRegister
 import ro.campuscompass.mobile.screens.auth.StudentLogin
+import kotlin.math.log
 
 fun NavGraphBuilder.authNavGraph(
         navController: NavController,
@@ -23,7 +25,10 @@ fun NavGraphBuilder.authNavGraph(
         composable(AuthNavGraph.StudentLogin.route) {
             StudentLogin(onLoginClick = { studentId, uniId ->
                 navController.popBackStack()
-                navController.navigate(StudentNavGraph.StudentMainPage.withStudentIdAndUniId(studentId,uniId))
+                navController.navigate(StudentNavGraph.StudentMainPage.withStudentIdAndUniId(studentId, uniId))
+            }, onOfferSelected = { offerId ->
+                navController.popBackStack()
+                navController.navigate(StudentNavGraph.StudentApplicationPage.withOfferId(offerId))
             })
         }
         composable(AuthNavGraph.LandlordLogin.route) {

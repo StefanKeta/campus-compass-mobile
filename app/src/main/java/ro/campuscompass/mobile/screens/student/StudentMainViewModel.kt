@@ -30,6 +30,14 @@ class StudentMainViewModel(private val studentService: StudentService) : ViewMod
         }
     }
 
+    fun checkIfStudentTookOffer(studentId: String, onSuccess: (Offer?) -> Unit) {
+        viewModelScope.launch {
+            studentService.checkIfStudentApplied(studentId).onSuccess {
+                onSuccess(it)
+            }
+        }
+    }
+
     companion object {
         const val TAG = "StudentMainViewModel"
     }

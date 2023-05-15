@@ -7,6 +7,7 @@ import ro.campuscompass.mobile.screens.auth.SignInViewModel
 import ro.campuscompass.mobile.screens.student.StudentMainViewModel
 import ro.campuscompass.mobile.screens.landlord.LandLordPropertiesViewModel
 import ro.campuscompass.mobile.screens.landlord.addproperty.AddPropertyViewModel
+import ro.campuscompass.mobile.screens.student.StudentApplicationViewModel
 import ro.campuscompass.mobile.services.auth.AuthenticationService
 import ro.campuscompass.mobile.services.auth.EmailAndPasswordClient
 import ro.campuscompass.mobile.services.student.StudentService
@@ -43,5 +44,8 @@ val appModule = module {
     }
     viewModel {
         LandLordPropertiesViewModel(get())
+    }
+    viewModel {
+        StudentApplicationViewModel(get())
     }
 }
