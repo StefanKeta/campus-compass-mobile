@@ -1,6 +1,7 @@
 package ro.campuscompass.mobile.repository
 
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.suspendCancellableCoroutine
 import ro.campuscompass.mobile.models.ModelResult
@@ -26,10 +27,31 @@ class Repository {
         }
     }
 
-    suspend fun <T> getDocument(
+
+    suspend fun <T> getCollectionByFilter(
             collectionName: String,
-            documentId: String,
             clazz: Class<T>,
+            filter: Pair<String,Any>
+    ): ModelResult<List<(T)>> {
+        return suspendCancellableCoroutine { cont ->
+            db.collection(collectionName)
+                    .whereEqualTo(filter.first,filter.second)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val list = result.toObjects(clazz)
+                        cont.resumeWith(Result.success(ModelResult.success(list)))
+                    }
+                    .addOnFailureListener { exception ->
+                        println("Error getting documents: $exception")
+                        cont.resumeWith(Result.success(ModelResult.error(exception.message)))
+                    }
+        }
+    }
+
+    suspend fun <T> getDocument(
+        collectionName: String,
+        documentId: String,
+        clazz: Class<T>,
     ): ModelResult<T> {
         return suspendCancellableCoroutine { cont ->
             db.collection(collectionName)
@@ -45,6 +67,29 @@ class Repository {
                     }
         }
     }
+
+    suspend fun <T> getDocumentByFilter(
+            collectionName: String,
+            field:String,
+            value:String,
+            clazz: Class<T>,
+    ): ModelResult<T?> {
+        return suspendCancellableCoroutine { cont ->
+            db.collection(collectionName)
+                    .whereEqualTo(field,value)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        val obj = if (result.isEmpty) null
+                        else result.documents.first().toObject(clazz)
+                        cont.resumeWith(Result.success(ModelResult.success(obj)))
+                    }
+                    .addOnFailureListener { exception ->
+                        println("Error getting documents: $exception")
+                        cont.resumeWith(Result.success(ModelResult.error(exception.message ?: "")))
+                    }
+        }
+    }
+
 
     suspend fun addDocument(
             collectionName: String,
@@ -77,4 +122,14 @@ class Repository {
                     }
         }
     }
+
+    suspend fun updateDocument(collectionName: String, documentId: String, fieldsToUpdate: Map<String, Any>): ModelResult<Int> {
+        return suspendCancellableCoroutine { cont ->
+            db.collection(collectionName).document(documentId).update(fieldsToUpdate).addOnSuccessListener {
+                cont.resumeWith(Result.success(ModelResult.success(1)))
+            }
+        }
+    }
+
+
 }

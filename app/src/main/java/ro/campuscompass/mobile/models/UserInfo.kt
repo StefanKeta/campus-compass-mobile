@@ -1,6 +1,9 @@
 package ro.campuscompass.mobile.models
 
+import com.google.firebase.firestore.DocumentId
+
 data class UserInfo(
-    val userId: String,
-    val userType: UserType,
+        @DocumentId val userId: String = "",
+        val userType: UserType = UserType.UNKNOWN,
+        val universityId: String = "",
 )

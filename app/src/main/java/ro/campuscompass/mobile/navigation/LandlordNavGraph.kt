@@ -11,7 +11,7 @@ fun NavGraphBuilder.landlordNavGraph(
         navController: NavController,
 ) {
     navigation(
-            route = Graph.LANDLORD,
+            route = Graph.LANDLORD.route,
             startDestination = LandlordNavGraph.LandlordMainPage.route
     ) {
         composable(LandlordNavGraph.LandlordMainPage.route) {

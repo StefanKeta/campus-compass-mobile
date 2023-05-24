@@ -1,5 +1,6 @@
 package ro.campuscompass.mobile.navigation
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -8,52 +9,43 @@ import ro.campuscompass.mobile.MainPage
 import ro.campuscompass.mobile.screens.auth.LandlordLogin
 import ro.campuscompass.mobile.screens.auth.LandlordRegister
 import ro.campuscompass.mobile.screens.auth.StudentLogin
+import kotlin.math.log
 
 fun NavGraphBuilder.authNavGraph(
-    navController: NavController,
+        navController: NavController,
 ) {
-    navigation(
-        route = Graph.AUTH,
-        startDestination = AuthNavGraph.MainLogin.route
-    ) {
+    navigation(route = Graph.AUTH.route, startDestination = AuthNavGraph.MainLogin.route) {
         composable(AuthNavGraph.MainLogin.route) {
-            MainPage(
-                studentLoginClick = {
-                    navController.navigate(AuthNavGraph.StudentLogin.route)
-                },
-                landlordLoginClick = {
-                    navController.navigate(AuthNavGraph.LandlordLogin.route)
-                }
-            )
+            MainPage(studentLoginClick = {
+                navController.navigate(AuthNavGraph.StudentLogin.route)
+            }, landlordLoginClick = {
+                navController.navigate(AuthNavGraph.LandlordLogin.route)
+            })
         }
         composable(AuthNavGraph.StudentLogin.route) {
-            StudentLogin(
-                onLoginClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.STUDENT)
-                })
+            StudentLogin(onLoginClick = { studentId, uniId ->
+                navController.popBackStack()
+                navController.navigate(StudentNavGraph.StudentMainPage.withStudentIdAndUniId(studentId, uniId))
+            }, onOfferSelected = { offerId ->
+                navController.popBackStack()
+                navController.navigate(StudentNavGraph.StudentApplicationPage.withOfferId(offerId))
+            })
         }
         composable(AuthNavGraph.LandlordLogin.route) {
-            LandlordLogin(
-                onLoginClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.LANDLORD)
-                },
-                onDontHaveAccountClick = {
-                    navController.navigate(AuthNavGraph.LandlordRegister.route)
-                }
-            )
+            LandlordLogin(onLoginClick = {
+                navController.popBackStack()
+                navController.navigate(Graph.LANDLORD.route)
+            }, onDontHaveAccountClick = {
+                navController.navigate(AuthNavGraph.LandlordRegister.route)
+            })
         }
         composable(AuthNavGraph.LandlordRegister.route) {
-            LandlordRegister(
-                onRegisterClick = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.LANDLORD)
-                },
-                onAlreadyRegisteredClick = {
-                    navController.navigate(AuthNavGraph.LandlordLogin.route)
-                }
-            )
+            LandlordRegister(onRegisterClick = {
+                navController.popBackStack()
+                navController.navigate(Graph.LANDLORD.route)
+            }, onAlreadyRegisteredClick = {
+                navController.navigate(AuthNavGraph.LandlordLogin.route)
+            })
         }
     }
 }
