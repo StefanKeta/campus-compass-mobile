@@ -20,15 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import org.koin.androidx.compose.getViewModel
 import ro.campuscompass.mobile.R
-import ro.campuscompass.mobile.models.Offer
 import ro.campuscompass.mobile.screens.student.StudentMainViewModel
 import ro.campuscompass.mobile.screens.utils.AuthText
 import ro.campuscompass.mobile.screens.utils.EmailTextField
 import ro.campuscompass.mobile.screens.utils.PasswordTextField
-import ro.campuscompass.mobile.screens.utils.isEmailValid
 import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 
@@ -47,7 +44,7 @@ fun StudentLogin(
     var password by remember { mutableStateOf("") }
     val isButtonEnabled by remember {
         derivedStateOf {
-            isEmailValid(email) && password.isNotEmpty()
+            password.isNotEmpty()
         }
     }
 

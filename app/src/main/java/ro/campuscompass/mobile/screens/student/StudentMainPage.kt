@@ -11,10 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
+import ro.campuscompass.mobile.models.LandLordProperty
+import ro.campuscompass.mobile.screens.landlord.PropertyListItem
 import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
@@ -23,14 +24,10 @@ fun StudentMainPage(studentId: String = "", uniId: String = "", onOfferSelected:
     val offers = viewModel.properties.collectAsState()
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(offers.value) { offer ->
-            Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)) {
-                Text(text = offer.name, fontWeight = FontWeight.Bold)
-                Button(onClick = { viewModel.takeOffer(studentId, offer.id, onOfferSelected) }) {
-                    Text(text = "Reserve")
-                }
+        items(offers.value) { item ->
+            PropertyListItem(LandLordProperty(item.id, item.name, item.address, item.description, item.price, item.bedrooms, item.universityId, item.universityName, item.isTakenBy, item.image, item.availableFrom))
+            Button(onClick = { viewModel.takeOffer(studentId, item.id, onOfferSelected)}, modifier = Modifier.padding(bottom = 16.dp)) {
+                Text(text = "Reserve")
             }
         }
     }

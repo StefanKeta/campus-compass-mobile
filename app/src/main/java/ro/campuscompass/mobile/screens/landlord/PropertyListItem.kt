@@ -52,18 +52,18 @@ fun PropertyListItem(property: LandLordProperty) {
                         fontWeight = FontWeight.Bold)
                 Text(text = property.bedrooms.toString())
             }
-//            Row(modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.SpaceBetween) {
-//                Text(stringResource(id = R.string.landlord_property_available_from),
-//                        fontWeight = FontWeight.Bold)
-//                Text(text = property.availableFrom)
-//            }
             Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(id = R.string.landlord_property_description),
                         fontWeight = FontWeight.Bold)
                 Text(text = property.description)
             }
+            Row(modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(stringResource(id = R.string.landlord_property_available_from),
+                    fontWeight = FontWeight.Bold)
+            Text(text = property.universityName)
+        }
         }
     }
 }

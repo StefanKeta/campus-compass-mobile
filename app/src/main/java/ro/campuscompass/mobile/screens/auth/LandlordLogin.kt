@@ -42,7 +42,7 @@ fun LandlordLogin(
     var password by remember { mutableStateOf("") }
     val isButtonEnabled by remember {
         derivedStateOf {
-            isEmailValid(email) && password.isNotEmpty()
+            password.isNotEmpty()
         }
     }
 
