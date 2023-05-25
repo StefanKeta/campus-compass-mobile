@@ -6,18 +6,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ro.campuscompass.mobile.models.Offer
+import ro.campuscompass.mobile.repository.entities.LandLordPropertyEntity
 import ro.campuscompass.mobile.services.student.StudentService
 
 
 class StudentApplicationViewModel(private val studentService: StudentService) : ViewModel() {
-    private val _offer = MutableStateFlow<Offer>(Offer())
-    val takenOffer: StateFlow<Offer> = _offer
+    private val _property = MutableStateFlow<LandLordPropertyEntity>(LandLordPropertyEntity())
+    val takenProperty: StateFlow<LandLordPropertyEntity> = _property
 
-    fun getAppliedOffer(offerId: String) = viewModelScope.launch {
-        studentService.retrieveAppliedOffer(offerId).onSuccess {
+    fun getAppliedProperty(offerId: String) = viewModelScope.launch {
+        studentService.retrieveAppliedProperty(offerId).onSuccess {
                     Log.d(TAG, "getAppliedOffer: $it")
-                    _offer.value = it
+                    _property.value = it
                 }.onError {
                     Log.e(TAG, "getAppliedOffer: Failed with $it")
                 }

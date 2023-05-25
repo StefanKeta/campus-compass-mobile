@@ -83,7 +83,8 @@ fun PropertyListItemPreview() {
                 image = "Image 1",
                 availableFrom = "30 May 2023",
                 universityId = "1",
-                universityName = "University 1"
+                universityName = "University 1",
+                isTakenBy = "userId"
         ))
     }
 }

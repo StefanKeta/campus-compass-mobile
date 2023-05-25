@@ -51,8 +51,8 @@ fun StudentLogin(
         }
     }
 
-    val checkIfStudentApplied: (String, String) -> Unit = { studentId, uniId -> studentViewModel.checkIfStudentTookOffer(studentId) {
-        offer -> Log.d("StudentOffer", "StudentLogin: $offer");if (offer != null) onOfferSelected(offer.offerId) else onLoginClick(studentId, uniId) }
+    val checkIfStudentApplied: (String, String) -> Unit = { studentId, uniId ->
+        studentViewModel.checkIfStudentTookOffer(studentId) { offer -> Log.d("StudentOffer", "StudentLogin: $offer");if (offer != null) onOfferSelected(offer.id) else onLoginClick(studentId, uniId) }
     }
 
     val onLoginButtonClick: () -> Unit = {

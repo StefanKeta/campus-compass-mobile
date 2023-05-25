@@ -1,5 +1,7 @@
 package ro.campuscompass.mobile.repository.entities
 
-data class UniversityEntity(val id: String, val name: String) {
+import com.google.firebase.firestore.DocumentId
+
+data class UniversityEntity(@DocumentId val id: String, val name: String) {
     constructor() : this("", "")
 }

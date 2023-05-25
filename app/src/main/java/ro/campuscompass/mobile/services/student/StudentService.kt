@@ -1,28 +1,29 @@
 package ro.campuscompass.mobile.services.student
 
 import android.util.Log
+import ro.campuscompass.mobile.models.LandLordProperty
 import ro.campuscompass.mobile.models.ModelResult
 import ro.campuscompass.mobile.models.Offer
 import ro.campuscompass.mobile.repository.Repository
-import java.util.Optional
+import ro.campuscompass.mobile.repository.entities.LandLordPropertyEntity
 
-const val OFFERS_COL = "offers"
+const val PROPERTIES = "landlord_properties"
 
 class StudentService(private val repository: Repository) {
-    suspend fun retrieveOffersForUniversity(universityId: String): ModelResult<List<Offer>> {
-        return repository.getCollectionByFilter(OFFERS_COL, Offer::class.java, Pair("universityId", universityId)).map { it -> it.filter { it.takenBy.isEmpty() } }.also { Log.d("Loading offers", "retrieveOffersForUniversity: ") }
+    suspend fun retrievePropertiesForUniversity(universityId: String): ModelResult<List<LandLordPropertyEntity>> {
+        return repository.getCollectionByFilter(PROPERTIES, LandLordPropertyEntity::class.java, Pair("universityId", universityId)).map { it.filter { prop -> prop.isTakenBy.isEmpty() } }.also { Log.d("Loading offers", "retrieveOffersForUniversity: ") }
     }
 
-    suspend fun assignStudentToOffer(studentId: String, offerId: String): ModelResult<Int> {
-        Log.d("OfferAssigning", "assignStudentToOffer: $offerId")
-        return repository.updateDocument(OFFERS_COL, offerId, mapOf(Pair("takenBy", studentId)))
+    suspend fun assignStudentToProperty(studentId: String, propertyId: String): ModelResult<Int> {
+        Log.d("OfferAssigning", "assignStudentToOffer: $propertyId")
+        return repository.updateDocument(PROPERTIES, propertyId, mapOf(Pair("isTakenBy", studentId)))
     }
 
-    suspend fun retrieveAppliedOffer(offerId: String): ModelResult<Offer> {
-        return repository.getDocument(OFFERS_COL, offerId, Offer::class.java)
+    suspend fun retrieveAppliedProperty(propertyId: String): ModelResult<LandLordPropertyEntity> {
+        return repository.getDocument(PROPERTIES, propertyId, LandLordPropertyEntity::class.java)
     }
 
-    suspend fun checkIfStudentApplied(studentId:String):ModelResult<Offer?>{
-        return repository.getDocumentByFilter(OFFERS_COL,"takenBy",studentId,Offer::class.java)
+    suspend fun checkIfStudentApplied(studentId: String): ModelResult<LandLordPropertyEntity?> {
+        return repository.getDocumentByFilter(PROPERTIES, "isTakenBy", studentId, LandLordPropertyEntity::class.java)
     }
 }

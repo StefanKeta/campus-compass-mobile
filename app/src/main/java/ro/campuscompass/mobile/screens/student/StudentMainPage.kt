@@ -20,7 +20,7 @@ import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 @Composable
 fun StudentMainPage(studentId: String = "", uniId: String = "", onOfferSelected: (String) -> Unit = {}) {
     val viewModel = getViewModel<StudentMainViewModel>().also { it.retrieveOffers(uniId) }
-    val offers = viewModel.offers.collectAsState()
+    val offers = viewModel.properties.collectAsState()
 
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(offers.value) { offer ->
@@ -28,7 +28,7 @@ fun StudentMainPage(studentId: String = "", uniId: String = "", onOfferSelected:
                     .fillMaxWidth()
                     .padding(16.dp)) {
                 Text(text = offer.name, fontWeight = FontWeight.Bold)
-                Button(onClick = { viewModel.takeOffer(studentId, offer.offerId, onOfferSelected) }) {
+                Button(onClick = { viewModel.takeOffer(studentId, offer.id, onOfferSelected) }) {
                     Text(text = "Reserve")
                 }
             }

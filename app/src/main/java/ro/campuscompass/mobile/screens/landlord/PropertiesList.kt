@@ -40,10 +40,8 @@ fun PropertiesList(properties: List<LandLordProperty>) {
 @Composable
 fun PropertiesListPreview() {
     CampusCompassMobileTheme {
-        PropertiesList(
-                List(10) {
-                    LandLordProperty(it.toString(), "name $it", "address $it", "description $it", 100, 2, "universityId", "universityName", "image", "availableFrom")
-                }.toList()
-        )
+        PropertiesList(List(10) {
+            LandLordProperty(it.toString(), "name $it", "address $it", "description $it", 100, 2, "universityId", "universityName", "isTakenBy", "image", "availableFrom")
+        }.toList())
     }
 }
