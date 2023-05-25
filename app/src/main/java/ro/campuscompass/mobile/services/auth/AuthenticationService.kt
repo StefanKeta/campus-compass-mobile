@@ -1,6 +1,7 @@
 package ro.campuscompass.mobile.services.auth
 
 import ro.campuscompass.mobile.models.ModelResult
+import ro.campuscompass.mobile.models.SignInResult
 import ro.campuscompass.mobile.models.UserInfo
 import ro.campuscompass.mobile.models.UserType
 import ro.campuscompass.mobile.repository.Repository
@@ -51,12 +52,22 @@ class AuthenticationService(
         }
     }
 
+    suspend fun getStudentUser(email: String, password: String): ModelResult<UserInfoEntity?> {
+        return repository.getCollection(USERS, UserInfoEntity::class.java).map { list ->
+            list.find { userInfoEntity -> userInfoEntity.username == email && password == userInfoEntity.password }
+        }
+    }
+
+    suspend fun createUser(email: String, password: String): ModelResult<SignInResult> {
+        return emailAndPasswordClient.register(email, password)
+    }
+
     private suspend fun login(email: String, password: String): ModelResult<UserInfo> {
         return emailAndPasswordClient.login(email, password).flatmap { signInResult ->
             println("Fetching user info for ${signInResult.userId}")
             repository.getDocument(USERS, signInResult.userId, UserInfoEntity::class.java).map { document ->
                 println("User is $document")
-                UserInfo(userId = signInResult.userId, userType = document.userType, universityId = document.universityId)
+                UserInfo(userId = signInResult.userId, userType = document.userType, universityId = document.universityId, password = document.password, username = document.username)
             }
         }
     }

@@ -1,6 +1,5 @@
 package ro.campuscompass.mobile.screens.auth
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -9,9 +8,7 @@ import ro.campuscompass.mobile.models.UserInfo
 import ro.campuscompass.mobile.models.UserType
 import ro.campuscompass.mobile.services.auth.AuthenticationService
 
-class SignInViewModel(
-        private val authenticationService: AuthenticationService,
-) : ViewModel() {
+class SignInViewModel(private val authenticationService: AuthenticationService) : ViewModel() {
     private val userInfo = MutableStateFlow<UserInfo?>(null)
     val isLoading = MutableStateFlow(false)
 
@@ -23,14 +20,14 @@ class SignInViewModel(
     ) {
         viewModelScope.launch {
             isLoading.value = true
-            authenticationService.studentLogin(email, password).onSuccess {
-                userInfo.value = userInfo.value?.copy(userId = it.userId, userType = UserType.STUDENT, universityId = it.universityId)
-                onSuccess(it.userId, it.universityId)
-            }.onError {
-                onError(it)
-            }
-            isLoading.value = false
+            authenticationService.getStudentUser(email, password).onSuccess {
+                if (it != null) {
+                    userInfo.value = userInfo.value?.copy(userId = it.userId, userType = UserType.STUDENT, universityId = it.universityId, password = it.password, username = it.username)
+                    onSuccess(it.userId, it.universityId)
+                }
+            }.onError { onError("Student does not exist!") }
         }
+        isLoading.value = false
     }
 
     fun loginAsLandlord(

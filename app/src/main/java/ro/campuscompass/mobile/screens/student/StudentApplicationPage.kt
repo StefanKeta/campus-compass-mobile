@@ -12,14 +12,15 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun StudentApplicationPage(offerId: String) {
-    val viewModel = getViewModel<StudentApplicationViewModel>().also { it.getAppliedOffer(offerId) }
-    val propertyToDisplay = viewModel.takenOffer.collectAsState()
+    val viewModel = getViewModel<StudentApplicationViewModel>().also { it.getAppliedProperty(offerId) }
+    val propertyToDisplay = viewModel.takenProperty.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(propertyToDisplay.value.name)
-        Text("Item 2")
-        Text("Item 3")
-        Text("Item 4")
-        Text("Item 5")
+        Text("Name: ${propertyToDisplay.value.name}")
+        Text("University: ${propertyToDisplay.value.universityName}")
+        Text("Address: ${propertyToDisplay.value.address}")
+        Text("Description: ${propertyToDisplay.value.description}")
+        Text("Bedrooms: ${propertyToDisplay.value.bedrooms}")
+        Text("Price per night: ${propertyToDisplay.value.price}")
     }
 }

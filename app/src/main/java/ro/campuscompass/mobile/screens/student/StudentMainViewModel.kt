@@ -7,17 +7,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ro.campuscompass.mobile.models.Offer
+import ro.campuscompass.mobile.repository.entities.LandLordPropertyEntity
 import ro.campuscompass.mobile.services.student.StudentService
 
 class StudentMainViewModel(private val studentService: StudentService) : ViewModel() {
-    private val _offers = MutableStateFlow<List<Offer>>(emptyList())
-    val offers: StateFlow<List<Offer>> = _offers
+    private val _properties = MutableStateFlow<List<LandLordPropertyEntity>>(emptyList())
+    val properties: StateFlow<List<LandLordPropertyEntity>> = _properties
 
     fun retrieveOffers(universityId: String) {
         viewModelScope.launch {
-            studentService.retrieveOffersForUniversity(universityId).onSuccess { off ->
+            studentService.retrievePropertiesForUniversity(universityId).onSuccess { off ->
                 Log.d("Offers loaded", "retrieveOffers: $off")
-                _offers.value = off
+                _properties.value = off
             }.onError {
                 Log.e(TAG, "retrieveOffers: Unable to retrieve items")
             }
@@ -26,11 +27,11 @@ class StudentMainViewModel(private val studentService: StudentService) : ViewMod
 
     fun takeOffer(studentId: String, offerId: String, onOfferTaken: (String) -> Unit) {
         viewModelScope.launch {
-            studentService.assignStudentToOffer(studentId, offerId).onSuccess { onOfferTaken(offerId) }
+            studentService.assignStudentToProperty(studentId, offerId).onSuccess { onOfferTaken(offerId) }
         }
     }
 
-    fun checkIfStudentTookOffer(studentId: String, onSuccess: (Offer?) -> Unit) {
+    fun checkIfStudentTookOffer(studentId: String, onSuccess: (LandLordPropertyEntity?) -> Unit) {
         viewModelScope.launch {
             studentService.checkIfStudentApplied(studentId).onSuccess {
                 onSuccess(it)

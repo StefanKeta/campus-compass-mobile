@@ -9,6 +9,7 @@ data class LandLordProperty(
         val bedrooms: Int,
         val universityId: String,
         val universityName: String,
+        val isTakenBy: String,
         val image: String?,
         val availableFrom: String?,
 )

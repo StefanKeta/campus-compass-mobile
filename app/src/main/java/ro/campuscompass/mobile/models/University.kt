@@ -1,3 +1,5 @@
 package ro.campuscompass.mobile.models
 
-data class University(val id: String, val name: String)
+import com.google.firebase.firestore.DocumentId
+
+data class University(@DocumentId val id: String, val name: String)
