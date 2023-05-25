@@ -24,8 +24,6 @@ fun EmailTextField(
 ) {
     var emailFieldWasTouched by remember { mutableStateOf(false) }
 
-    val hasError = emailFieldWasTouched && !isEmailValid(email)
-
     OutlinedTextField(
         value = email,
         onValueChange = {
@@ -34,26 +32,6 @@ fun EmailTextField(
         },
         label = { Text(stringResource(R.string.prompt_email)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        isError = hasError,
-        supportingText = {
-            if (hasError) {
-                Text(
-                    if (email.isEmpty()) stringResource(R.string.required_email_field) else stringResource(
-                        R.string.invalid_email
-                    ),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        },
-        trailingIcon = {
-            if (hasError) {
-                Icon(
-                    Icons.Filled.Error,
-                    stringResource(R.string.invalid_email),
-                    tint = MaterialTheme.colorScheme.error
-                )
-            }
-        }
     )
 }
 

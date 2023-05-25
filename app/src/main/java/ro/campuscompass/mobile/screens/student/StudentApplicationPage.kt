@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.koin.androidx.compose.getViewModel
+import ro.campuscompass.mobile.screens.landlord.PropertiesList
 
 @Composable
 fun StudentApplicationPage(offerId: String) {

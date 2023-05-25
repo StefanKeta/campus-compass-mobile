@@ -32,7 +32,7 @@
     <string name="landlord_property_description_required">Description is required</string>
     <string name="landlord_property_price_required">Price per night is required</string>
     <string name="landlord_property_bedrooms_required">Bedrooms is required</string>
-    <string name="landlord_property_available_from">Available From</string>
+    <string name="landlord_property_available_from">University name</string>
     <string name="landlord_add_property">Add Property</string>
     <string name="landlord_page_error_message">Something went wrong while getting properties</string>
     <string name="landlord_no_properties">No properties yet</string>

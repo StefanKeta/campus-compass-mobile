@@ -30,8 +30,8 @@ import ro.campuscompass.mobile.ui.theme.CampusCompassMobileTheme
 
 @Composable
 fun LandlordRegister(
-    onRegisterClick: () -> Unit,
-    onAlreadyRegisteredClick: () -> Unit,
+        onRegisterClick: () -> Unit,
+        onAlreadyRegisteredClick: () -> Unit,
 ) {
     val context = LocalContext.current
     val viewModel = getViewModel<SignInViewModel>()
@@ -42,53 +42,38 @@ fun LandlordRegister(
     var confirmPassword by remember { mutableStateOf("") }
     val isButtonEnabled by remember {
         derivedStateOf {
-            isEmailValid(email) && password.isNotEmpty() && password == confirmPassword
+            password.isNotEmpty() && password == confirmPassword
         }
     }
 
     val onRegisterButtonClick: () -> Unit = {
         viewModel.registerAsLandlord(email, password, onRegisterClick) {
-            Toast.makeText(
-                context, it, Toast.LENGTH_LONG
-            ).show()
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AuthText(R.string.landlord_register)
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
             EmailTextField(
-                email = email,
-                onEmailChange = { email = it },
+                    email = email,
+                    onEmailChange = { email = it },
             )
             PasswordTextField(
-                password = password,
-                onPasswordChange = { password = it },
-                errorMessage = if (password.length < 6) stringResource(R.string.password_too_short) else null,
+                    password = password,
+                    onPasswordChange = { password = it },
+                    errorMessage = if (password.length < 6) stringResource(R.string.password_too_short) else null,
             )
-            PasswordTextField(
-                confirmPassword,
-                onPasswordChange = { confirmPassword = it },
-                errorMessage = if (password != confirmPassword) stringResource(R.string.passwords_dont_match) else null,
-                label = stringResource(R.string.prompt_confirm_password)
-            )
-            Text(stringResource(R.string.already_registered),
-                Modifier.clickable { onAlreadyRegisteredClick() })
+            PasswordTextField(confirmPassword, onPasswordChange = { confirmPassword = it }, errorMessage = if (password != confirmPassword) stringResource(R.string.passwords_dont_match) else null, label = stringResource(R.string.prompt_confirm_password))
+            Text(stringResource(R.string.already_registered), Modifier.clickable { onAlreadyRegisteredClick() })
             if (isRegisterInProgress.value) {
                 CircularProgressIndicator()
             }
-            Button(
-                enabled = isButtonEnabled,
-                onClick = onRegisterButtonClick
-            ) {
+            Button(enabled = isButtonEnabled, onClick = onRegisterButtonClick) {
                 Text(stringResource(R.string.register))
             }
         }
@@ -100,8 +85,8 @@ fun LandlordRegister(
 private fun LandlordRegisterPreview() {
     CampusCompassMobileTheme {
         LandlordRegister(
-            onRegisterClick = {},
-            onAlreadyRegisteredClick = {},
+                onRegisterClick = {},
+                onAlreadyRegisteredClick = {},
         )
     }
 }
